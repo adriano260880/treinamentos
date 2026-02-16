@@ -38,7 +38,7 @@ public class User {
                 '}';
     }
 
-    public User(Builder builder) {
+    private User(Builder builder) {
         this.name = builder.name;
         this.email = builder.email;
         this.phone = builder.phone;
