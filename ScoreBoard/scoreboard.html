@@ -1,0 +1,315 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Placar Machado Team</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: white;
+      text-align: center;
+    }
+
+    .container {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+
+    .fighter {
+      width: 40%;
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    .blue { background: #7b9bfc; }
+    .red { background: #fa8282; }
+
+    .score {
+      font-size: 80px;
+      margin: 10px 0;
+    }
+
+    .advpen {
+      font-size: 40px;
+      margin: 10px 0;
+    }
+
+    .controls button {
+      margin: 5px;
+      padding: 10px 15px;
+      font-size: 16px;
+    }
+
+    .timer {
+      font-size: 60px;
+      margin-top: 20px;
+    }
+
+    .winner {
+      border: 5px solid gold;
+    }
+
+    .positive-btn {
+        background-color: #ffd700;
+        color: black;
+        font-weight: bold;
+    }
+
+    .negative-btn {
+        background-color: #f30a0a;
+        color: white;
+        font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+<h1>Placar Machado Team</h1>
+
+<!-- ================= SETUP SCREEN ================= -->
+
+<div id="setupScreen">
+  <h2>Iniciar</h2>
+
+  <div>
+    <input id="setupNameA" placeholder="Atleta A">
+  </div>
+  <br>
+  <div>
+    <input id="setupNameB" placeholder="Atleta B">
+  </div>
+  <br>
+  <div>
+    <input id="setupTime" placeholder="Tempo em minutos">
+  </div>
+  <br>
+  <button onclick="createMatch()">Criar Luta</button>
+</div>
+
+<!-- ================= SCOREBOARD ================= -->
+
+<div id="scoreboard" style="display:none;">
+
+  <div class="timer" id="timer">00:00</div>
+  <button onclick="startTimer()">Start</button>
+  <button onclick="pauseTimer()">Pause</button>
+  <button onclick="resetMatch()">Reset</button>
+
+  <div class="container">
+
+    <div class="fighter blue" id="fighterA">
+      <h1 id="nameA"></h2>
+      <div class="score"> <span id="scoreA">0</span></div>
+      <div class="advpen">Vantagem: <span id="advA">0</span></div>
+      <div class="advpen">Punição: <span id="penA">0</span></div>
+
+      <div class="controls">
+        <button class="positive-btn" onclick="addPoints('A',2)">+2</button>
+        <button class="positive-btn" onclick="addPoints('A',3)">+3</button>
+        <button class="positive-btn" onclick="addPoints('A',4)">+4</button>
+      </div>
+      
+      <div class="controls">
+        <button class="negative-btn" onclick="subtractPoints('A',2)">-2</button>
+        <button class="negative-btn" onclick="subtractPoints('A',3)">-3</button>
+        <button class="negative-btn" onclick="subtractPoints('A',4)">-4</button>
+      </div>
+      <div class="controls">
+        <button class="positive-btn" onclick="addAdv('A')">Vantagem +</button>
+        <button class="positive-btn" onclick="addPen('A')">Punição +</button>
+      </div>
+      <div class="controls">
+        <button class="negative-btn" onclick="subAdv('A')">Vantagem -</button>
+        <button class="negative-btn" onclick="subPen('A')">Punição -</button>
+      </div>
+    </div>
+
+    <div class="fighter red" id="fighterB">
+      <h1 id="nameB"></h2>
+      <div class="score"><span id="scoreB">0</span></div>
+      <div class="advpen">Vantagem: <span id="advB">0</span></div>
+      <div class="advpen">Punição: <span id="penB">0</span></div>
+
+      <div class="controls">
+        <button class="positive-btn" onclick="addPoints('B',2)">+2</button>
+        <button class="positive-btn" onclick="addPoints('B',3)">+3</button>
+        <button class="positive-btn" onclick="addPoints('B',4)">+4</button>
+      </div>
+      
+      <div class="controls">
+        <button class="negative-btn" onclick="subtractPoints('B',2)">-2</button>
+        <button class="negative-btn" onclick="subtractPoints('B',3)">-3</button>
+        <button class="negative-btn" onclick="subtractPoints('B',4)">-4</button>
+      </div>
+      <div class="controls">
+        <button class="positive-btn" onclick="addAdv('B')">Vantagem +</button>
+        <button class="positive-btn" onclick="addPen('B')">Punição +</button>
+      </div>
+      <div class="controls">
+        <button class="negative-btn" onclick="subAdv('B')">Vantagem -</button>
+        <button class="negative-btn" onclick="subPen('B')">Punição -</button>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+  let state = {
+    A: { points: 0, adv: 0, pen: 0 },
+    B: { points: 0, adv: 0, pen: 0 },
+    time: 0,
+    interval: null,
+    history: []
+  };
+
+  function updateUI() {
+    scoreA.innerText = state.A.points;
+    scoreB.innerText = state.B.points;
+    advA.innerText = state.A.adv;
+    advB.innerText = state.B.adv;
+    penA.innerText = state.A.pen;
+    penB.innerText = state.B.pen;
+
+    let minutes = Math.floor(state.time / 60);
+    let seconds = state.time % 60;
+    timer.innerText =
+      String(minutes).padStart(2,'0') + ":" +
+      String(seconds).padStart(2,'0');
+  }
+
+  function saveHistory() {
+    const snapshot = {
+        A: { ...state.A },
+        B: { ...state.B },
+        time: state.time
+    };
+
+    state.history.push(snapshot);
+  }
+
+  function addPoints(player, value) {
+    saveHistory();
+    state[player].points += value;
+    updateUI();
+  }
+
+  function subtractPoints(player, value) {
+    if (state[player].points - value >= 0) {
+      saveHistory();
+      state[player].points -= value;
+      updateUI();
+    }
+  }
+
+  function addAdv(player) {
+    saveHistory();
+    state[player].adv++;
+    updateUI();
+  }
+
+  function subAdv(player) {
+    if (state[player].adv > 0) {
+        saveHistory();
+        state[player].adv--;
+        updateUI();
+    }
+    
+  }
+
+  function subtractAdv(player) {
+    if (state[player].adv > 0) {
+      saveHistory();
+      state[player].adv--;
+      updateUI();
+    }
+  }
+
+  function addPen(player) {
+    saveHistory();
+    state[player].pen++;
+    updateUI();
+  }
+
+  function subPen(player) {
+    if (state[player].pen > 0) {
+        saveHistory();
+        state[player].pen--;
+        updateUI();
+    }
+    
+  }
+
+  function subtractPen(player) {
+    if (state[player].pen > 0) {
+      saveHistory();
+      state[player].pen--;
+      updateUI();
+    }
+  }
+
+  function startTimer() {
+    if (state.interval) return;
+    state.interval = setInterval(() => {
+      if (state.time > 0) {
+        state.time--;
+        updateUI();
+      } else {
+        clearInterval(state.interval);
+        declareWinner();
+      }
+    }, 1000);
+  }
+
+  function pauseTimer() {
+    clearInterval(state.interval);
+    state.interval = null;
+  }
+
+  function resetMatch() {
+    pauseTimer();
+    state = {
+      A: { points: 0, adv: 0, pen: 0 },
+      B: { points: 0, adv: 0, pen: 0 },
+      time: parseInt(document.getElementById("setupTime").value * 60),
+      interval: null,
+      history: []
+    };
+    fighterA.classList.remove("winner");
+    fighterB.classList.remove("winner");
+    updateUI();
+  }
+
+  function declareWinner() {
+    if (state.A.points > state.B.points) {
+      fighterA.classList.add("winner");
+    } else if (state.B.points > state.A.points) {
+      fighterB.classList.add("winner");
+    }
+  }
+
+  function createMatch() {
+  const nameAValue = document.getElementById("setupNameA").value || "Atleta A";
+  const nameBValue = document.getElementById("setupNameB").value || "Atleta B";
+  const timeValue = parseInt(document.getElementById("setupTime").value * 60);
+
+  state.A = { points: 0, adv: 0, pen: 0 };
+  state.B = { points: 0, adv: 0, pen: 0 };
+  state.time = timeValue;
+
+  document.getElementById("nameA").innerText = nameAValue;
+  document.getElementById("nameB").innerText = nameBValue;
+
+  document.getElementById("setupScreen").style.display = "none";
+  document.getElementById("scoreboard").style.display = "block";
+
+  updateUI();
+}
+
+  updateUI();
+</script>
+
+</body>
+</html>
