@@ -229,11 +229,12 @@ function startTimer(){
 
 function pauseTimer(){ 
     clearInterval(state.interval); state.interval=null;
-    generateMatchLog();
+    
 }
 
 function resetMatch(){
   pauseTimer();
+  generateMatchLog();
   state.A={points:0,adv:0,pen:0};
   state.B={points:0,adv:0,pen:0};
   state.time=0;
@@ -274,12 +275,12 @@ function generateMatchLog() {
     state.B.points > state.A.points ? nameB.innerText :
     "Draw";
 
-  const now = new Date().toLocaleString();
+  const now = new Date().toLocaleTimeString("pt-BR");
 
   const csvContent =
-    "Date; Name A; Points A; Adv A; Pen A; Name B; Points B; Adv B; Pen B; Winner\n" +
+    "Hora; Nome; Pontos; Vantagem; Punição; Nome; Pontos; Vantagem; Punição\n" +
     `${now};${nameA.innerText};${state.A.points};${state.A.adv};${state.A.pen};` +
-    `${nameB.innerText};${state.B.points};${state.B.adv};${state.B.pen};${winner}`;
+    `${nameB.innerText};${state.B.points};${state.B.adv};${state.B.pen}`;
 
   const blob = new Blob([csvContent], { type: "text/csv" });
   const url = URL.createObjectURL(blob);
