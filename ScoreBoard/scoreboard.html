@@ -74,10 +74,20 @@
 
   <div>
     <input id="setupNameA" placeholder="Atleta A">
+    <input id="setupRepresentaA" placeholder="Representa A">
   </div>
   <br>
   <div>
     <input id="setupNameB" placeholder="Atleta B">
+    <input id="setupRepresentaB" placeholder="Representa B">
+  </div>
+  <br>
+  <div>
+    <input id="setupPeso" placeholder="Peso">
+  </div>
+  <br>
+  <div>
+    <input id="setupFaixa" placeholder="Faixa">
   </div>
   <br>
   <div>
@@ -242,7 +252,7 @@ function resetMatch(){
 }
 
 function createMatch(){
-  nameA.innerText = setupNameA.value || "Atleta A";
+  nameA.innerText = setupNameA.value + " - " + setupRepresentaA.value || "Atleta A";
   nameB.innerText = setupNameB.value || "Atleta B";
   state.time = parseInt(setupTime.value)*60 || 0;
 
