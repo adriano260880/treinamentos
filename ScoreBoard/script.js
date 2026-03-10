@@ -87,7 +87,7 @@ function confirmReset() {
 
 function resetMatch(){
 
-   generateMatchLog();
+   generateMatchLog(null);
    window.location.reload();
 
 }
@@ -124,7 +124,7 @@ if(isPublicView){
   }
 }
 
-function generateMatchLog() {
+function generateMatchLog(submission = null) {
   const winner =
     state.A.points > state.B.points ? nameA.innerText :
     state.B.points > state.A.points ? nameB.innerText :
@@ -133,9 +133,9 @@ function generateMatchLog() {
   const now = new Date().toLocaleTimeString("pt-BR");
 
   const csvContent =
-    "Hora; Peso; Faixa; Nome; Pontos; Vantagem; Punição; Nome; Pontos; Vantagem; Punição\n" +
+    "Hora; Peso; Faixa; Nome; Pontos; Vantagem; Punição; Nome; Pontos; Vantagem; Punição; Finalização\n" +
     `${now};${setupPeso.innerText};${setupFaixa.innerText};${nameA.innerText};${state.A.points};${state.A.adv};${state.A.pen};` +
-    `${nameB.innerText};${state.B.points};${state.B.adv};${state.B.pen}`;
+    `${nameB.innerText};${state.B.points};${state.B.adv};${state.B.pen};${submission}`;
 
   const blob = new Blob([csvContent], { type: "text/csv" });
   const url = URL.createObjectURL(blob);
@@ -146,4 +146,19 @@ function generateMatchLog() {
   a.click();
 
   URL.revokeObjectURL(url);
+}
+
+function winBySubmission(fighter) {
+
+  pauseTimer();
+
+  let winnerName = fighter === 'A'
+    ? document.getElementById("nameA").innerText
+    : document.getElementById("nameB").innerText;
+
+  alert("Vitória por FINALIZAÇÃO de " + winnerName);
+
+  generateMatchLog(winnerName);
+  window.location.reload();
+
 }
