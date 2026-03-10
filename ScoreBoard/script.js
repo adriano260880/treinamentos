@@ -15,7 +15,9 @@ function syncLocal() {
     B: state.B,
     time: state.time,
     nameA: nameA.innerText,
-    nameB: nameB.innerText
+    nameB: nameB.innerText,
+    setupPeso: setupPeso.innerText,
+    setupFaixa: setupFaixa.innerText
   }));
 }
 
@@ -44,6 +46,8 @@ window.addEventListener("storage", (event) => {
     state.time = data.time;
     nameA.innerText = data.nameA;
     nameB.innerText = data.nameB;
+    setupPeso.innerText = data.setupPeso;
+    setupFaixa.innerText = data.setupFaixa;
     updateUI();
   }
 });
@@ -91,6 +95,8 @@ function resetMatch(){
 function createMatch(){
   nameA.innerText = setupNameA.value + " " + setupRepresentaA.value || "Atleta A";
   nameB.innerText = setupNameB.value + " " + setupRepresentaB.value || "Atleta B";
+  setupPeso.innerText = setupPeso.value;
+  setupFaixa.innerText = setupFaixa.value;
   state.time = parseInt(setupTime.value)*60 || 300;
 
   setupScreen.style.display="none";
@@ -110,6 +116,8 @@ if(isPublicView){
     state.time=data.time;
     nameA.innerText=data.nameA;
     nameB.innerText=data.nameB;
+    setupPeso.innerText = data.setupPeso;
+    setupFaixa.innerText = data.setupFaixa;
     setupScreen.style.display="none";
     scoreboard.style.display="block";
     updateUI();
@@ -125,8 +133,8 @@ function generateMatchLog() {
   const now = new Date().toLocaleTimeString("pt-BR");
 
   const csvContent =
-    "Hora; Nome; Pontos; Vantagem; Punição; Nome; Pontos; Vantagem; Punição\n" +
-    `${now};${nameA.innerText};${state.A.points};${state.A.adv};${state.A.pen};` +
+    "Hora; Peso; Faixa; Nome; Pontos; Vantagem; Punição; Nome; Pontos; Vantagem; Punição\n" +
+    `${now};${setupPeso.innerText};${setupFaixa.innerText};${nameA.innerText};${state.A.points};${state.A.adv};${state.A.pen};` +
     `${nameB.innerText};${state.B.points};${state.B.adv};${state.B.pen}`;
 
   const blob = new Blob([csvContent], { type: "text/csv" });
