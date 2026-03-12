@@ -32,8 +32,8 @@ function updateUI() {
   let minutes = Math.floor(state.time / 60);
   let seconds = state.time % 60;
   timer.innerText =
-    String(minutes).padStart(2,'0') + ":" +
-    String(seconds).padStart(2,'0');
+    String(minutes).padStart(2, '0') + ":" +
+    String(seconds).padStart(2, '0');
 
   syncLocal();
 }
@@ -52,97 +52,147 @@ window.addEventListener("storage", (event) => {
   }
 });
 
-function addPoints(p,v){ state[p].points+=v; updateUI(); }
-function subtractPoints(p,v){ if(state[p].points>=v){ state[p].points-=v; updateUI(); }}
-function addAdv(p){ state[p].adv++; updateUI(); }
-function subAdv(p){ if(state[p].adv>0){ state[p].adv--; updateUI(); }}
-function addPen(p){ state[p].pen++; updateUI(); }
-function subPen(p){ if(state[p].pen>0){ state[p].pen--; updateUI(); }}
+function addPoints(p, v) { state[p].points += v; updateUI(); }
+function subtractPoints(p, v) { if (state[p].points >= v) { state[p].points -= v; updateUI(); } }
+function addAdv(p) { state[p].adv++; updateUI(); }
+function subAdv(p) { if (state[p].adv > 0) { state[p].adv--; updateUI(); } }
+function addPen(p) { state[p].pen++; updateUI(); }
+function subPen(p) { if (state[p].pen > 0) { state[p].pen--; updateUI(); } }
 
-function startTimer(){
-  if(state.interval) return;
-  state.interval=setInterval(()=>{
-    if(state.time>0){ 
-        state.time--; 
-        updateUI();
+function startTimer() {
+  if (state.interval) return;
+  state.interval = setInterval(() => {
+    if (state.time > 0) {
+      state.time--;
+      updateUI();
     } else {
-        clearInterval(state.interval);
-        generateMatchLog();
+      clearInterval(state.interval);
+      generateMatchLog();
+      window.location.reload();
     }
-  },1000);
+  }, 1000);
 }
 
-function pauseTimer(){ 
-    clearInterval(state.interval); state.interval=null;
-    
+function pauseTimer() {
+  clearInterval(state.interval); state.interval = null;
+
 }
 
 function confirmReset() {
-    const confirmed = confirm("Deseja realmente reiniciar o jogo?");
+  const confirmed = confirm("Deseja realmente reiniciar o jogo?");
 
-    if (confirmed) {
-        resetMatch();
-    }
+  if (confirmed) {
+    resetMatch();
+  }
 }
 
-function resetMatch(){
+function resetMatch() {
 
-   generateMatchLog(null);
-   window.location.reload();
+  generateMatchLog();
+  window.location.reload();
 
 }
 
-function createMatch(){
+function createMatch() {
   nameA.innerText = setupNameA.value + " " + setupRepresentaA.value || "Atleta A";
   nameB.innerText = setupNameB.value + " " + setupRepresentaB.value || "Atleta B";
   setupPeso.innerText = setupPeso.value;
   setupFaixa.innerText = setupFaixa.value;
-  state.time = parseInt(setupTime.value)*60 || 300;
+  state.time = parseInt(setupTime.value) * 60 || 300;
 
-  setupScreen.style.display="none";
-  scoreboard.style.display="block";
+  setupScreen.style.display = "none";
+  scoreboard.style.display = "block";
   updateUI();
 }
 
-if(isPublicView){
-  document.querySelectorAll(".controls,#refControls,button").forEach(el=>el.style.display="none");
-  document.body.style.cursor="none";
+if (isPublicView) {
+  document.querySelectorAll(".controls,#refControls,button").forEach(el => el.style.display = "none");
+  document.body.style.cursor = "none";
 
-  const saved=localStorage.getItem("matchState");
-  if(saved){
-    const data=JSON.parse(saved);
-    state.A=data.A;
-    state.B=data.B;
-    state.time=data.time;
-    nameA.innerText=data.nameA;
-    nameB.innerText=data.nameB;
+  const saved = localStorage.getItem("matchState");
+  if (saved) {
+    const data = JSON.parse(saved);
+    state.A = data.A;
+    state.B = data.B;
+    state.time = data.time;
+    nameA.innerText = data.nameA;
+    nameB.innerText = data.nameB;
     setupPeso.innerText = data.setupPeso;
     setupFaixa.innerText = data.setupFaixa;
-    setupScreen.style.display="none";
-    scoreboard.style.display="block";
+    setupScreen.style.display = "none";
+    scoreboard.style.display = "block";
     updateUI();
   }
 }
 
+function calculateWinner(submission) {
+  if (submission !== null) {
+    return submission;
+  }
+
+  // Compare points
+  if (state.A.points > state.B.points) return nameA.innerText;
+  if (state.B.points > state.A.points) return nameB.innerText;
+
+  // Compare advantages
+  if (state.A.adv > state.B.adv) return nameA.innerText;
+  if (state.B.adv > state.A.adv) return nameB.innerText;
+
+  // Compare penalties (less penalty wins)
+  if (state.A.pen < state.B.pen) return nameA.innerText;
+  if (state.B.pen < state.A.pen) return nameB.innerText;
+
+  return "Empate";
+}
+
 function generateMatchLog(submission = null) {
-  const winner =
-    state.A.points > state.B.points ? nameA.innerText :
-    state.B.points > state.A.points ? nameB.innerText :
-    "Draw";
+
+  const winner = calculateWinner(submission);
 
   const now = new Date().toLocaleTimeString("pt-BR");
 
   const csvContent =
-    "Hora; Peso; Faixa; Nome; Pontos; Vantagem; Punição; Nome; Pontos; Vantagem; Punição; Finalização\n" +
-    `${now};${setupPeso.innerText};${setupFaixa.innerText};${nameA.innerText};${state.A.points};${state.A.adv};${state.A.pen};` +
-    `${nameB.innerText};${state.B.points};${state.B.adv};${state.B.pen};${submission}`;
+    [
+      "Hora",
+      "Peso",
+      "Faixa",
+      "Nome",
+      "Pontos",
+      "Vantagem",
+      "Punição",
+      "Nome",
+      "Pontos",
+      "Vantagem",
+      "Punição",
+      "Finalização",
+      "Vencedor"
+    ].join(";") +
+    "\n" +
+    [
+      now,
+      setupPeso.innerText,
+      setupFaixa.innerText,
+      nameA.innerText,
+      state.A.points,
+      state.A.adv,
+      state.A.pen,
+      nameB.innerText,
+      state.B.points,
+      state.B.adv,
+      state.B.pen,
+      submission,
+      winner
+    ].join(";");
 
   const blob = new Blob([csvContent], { type: "text/csv" });
   const url = URL.createObjectURL(blob);
 
+  const fileName =
+    `${now}-${nameA.innerText}-vs-${nameB.innerText}.csv`;
+
   const a = document.createElement("a");
   a.href = url;
-  a.download = now+nameA.innerText+nameB.innerText+".csv";
+  a.download = fileName;
   a.click();
 
   URL.revokeObjectURL(url);

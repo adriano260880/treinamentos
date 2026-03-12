@@ -1,127 +1,131 @@
-
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>Placar Machado Team</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-<h1>Placar Machado Team</h1>
+  <h1>Placar Machado Team</h1>
 
-<!-- ================= SETUP SCREEN ================= -->
+  <!-- ================= SETUP SCREEN ================= -->
 
-<div id="setupScreen">
-  <h2>Iniciar</h2>
+  <div id="setupScreen">
+    <h2>Iniciar</h2>
 
-  <div>
-    <input id="setupNameA" placeholder="Atleta A">
-    <input id="setupRepresentaA" placeholder="Representa A">
+    <div>
+      <input id="setupNameA" placeholder="Atleta A">
+      <input id="setupRepresentaA" placeholder="Representa A">
+    </div>
+    <br>
+    <div>
+      <input id="setupNameB" placeholder="Atleta B">
+      <input id="setupRepresentaB" placeholder="Representa B">
+    </div>
+    <br>
+    <div>
+      <input id="setupPeso" placeholder="Peso">
+    </div>
+    <br>
+    <div>
+      <input id="setupFaixa" placeholder="Faixa">
+    </div>
+    <br>
+    <div>
+      <input id="setupTime" placeholder="Tempo em minutos">
+    </div>
+    <br>
+    <button onclick="createMatch()">Criar Luta</button>
   </div>
-  <br>
-  <div>
-    <input id="setupNameB" placeholder="Atleta B">
-    <input id="setupRepresentaB" placeholder="Representa B">
-  </div>
-  <br>
-  <div>
-    <input id="setupPeso" placeholder="Peso">
-  </div>
-  <br>
-  <div>
-    <input id="setupFaixa" placeholder="Faixa">
-  </div>
-  <br>
-  <div>
-    <input id="setupTime" placeholder="Tempo em minutos">
-  </div>
-  <br>
-  <button onclick="createMatch()">Criar Luta</button>
-</div>
 
-<!-- ================= SCOREBOARD ================= -->
+  <!-- ================= SCOREBOARD ================= -->
 
-<div id="scoreboard" style="display:none;">
+  <div id="scoreboard" style="display:none;">
 
-  <div class="timer" id="timer">00:00</div> 
-  
-  <div class="timer-controls">
-    <button class="control-btn start-btn" onclick="startTimer()">Start</button>
-    <button class="control-btn pause-btn" onclick="pauseTimer()">Pause</button>
-    <button class="control-btn reset-btn" onclick="confirmReset()">Reset</button>
-  </div>  
+    <div class="timer" id="timer">00:00</div>
 
-  <div class="container">
-
-    <div class="fighter blue" id="fighterA">
-
-      <div class="controls">
-        <button class="submit-btn" onclick="winBySubmission('A')">Finalização</button>
-      </div>
-    </br>
-
-      <h1 id="nameA"></h2>
-      <div class="score"> <span id="scoreA">0</span></div>
-      <div class="advpen">Vantagem: <span id="advA">0</span></div>
-      <div class="advpen">Punição: <span id="penA">0</span></div>
-
-      <div class="controls">
-        <button class="positive-btn" onclick="addPoints('A',2)">+2</button>
-        <button class="positive-btn" onclick="addPoints('A',3)">+3</button>
-        <button class="positive-btn" onclick="addPoints('A',4)">+4</button>
-      </div>
-      
-      <div class="controls">
-        <button class="negative-btn" onclick="subtractPoints('A',2)">-2</button>
-        <button class="negative-btn" onclick="subtractPoints('A',3)">-3</button>
-        <button class="negative-btn" onclick="subtractPoints('A',4)">-4</button>
-      </div>
-      <div class="controls">
-        <button class="positive-btn" onclick="addAdv('A')">Vantagem +</button>
-        <button class="positive-btn" onclick="addPen('A')">Punição +</button>
-      </div>
-      <div class="controls">
-        <button class="negative-btn" onclick="subAdv('A')">Vantagem -</button>
-        <button class="negative-btn" onclick="subPen('A')">Punição -</button>
-      </div>
+    <div class="timer-controls">
+      <button class="control-btn start-btn" onclick="startTimer()">Start</button>
+      <button class="control-btn pause-btn" onclick="pauseTimer()">Pause</button>
+      <button class="control-btn reset-btn" onclick="confirmReset()">Reset</button>
     </div>
 
-    <div class="fighter red" id="fighterB">
-      <div class="controls">
-        <button class="submit-btn" onclick="winBySubmission('B')">Finalização</button>
-      </div>
-    </br>
+    <div class="container">
 
-      <h1 id="nameB"></h2>
-      <div class="score"><span id="scoreB">0</span></div>
-      <div class="advpen">Vantagem: <span id="advB">0</span></div>
-      <div class="advpen">Punição: <span id="penB">0</span></div>
+      <div class="fighter blue" id="fighterA">
 
-      <div class="controls">
-        <button class="positive-btn" onclick="addPoints('B',2)">+2</button>
-        <button class="positive-btn" onclick="addPoints('B',3)">+3</button>
-        <button class="positive-btn" onclick="addPoints('B',4)">+4</button>
+        <div class="controls">
+          <button class="submit-btn" onclick="winBySubmission('A')">Finalização</button>
+        </div>
+        </br>
+
+        <h1 id="nameA">
+          </h2>
+          <div class="score"> <span id="scoreA">0</span></div>
+          <div class="advpen">Vantagem: <span id="advA">0</span></div>
+          <div class="advpen">Punição: <span id="penA">0</span></div>
+
+          <div class="controls">
+            <button class="positive-btn" onclick="addPoints('A',2)">+2</button>
+            <button class="positive-btn" onclick="addPoints('A',3)">+3</button>
+            <button class="positive-btn" onclick="addPoints('A',4)">+4</button>
+          </div>
+
+          <div class="controls">
+            <button class="negative-btn" onclick="subtractPoints('A',2)">-2</button>
+            <button class="negative-btn" onclick="subtractPoints('A',3)">-3</button>
+            <button class="negative-btn" onclick="subtractPoints('A',4)">-4</button>
+          </div>
+          <div class="controls">
+            <button class="positive-btn" onclick="addAdv('A')">Vantagem +</button>
+            <button class="positive-btn" onclick="addPen('A')">Punição +</button>
+          </div>
+          <div class="controls">
+            <button class="negative-btn" onclick="subAdv('A')">Vantagem -</button>
+            <button class="negative-btn" onclick="subPen('A')">Punição -</button>
+          </div>
       </div>
-      
-      <div class="controls">
-        <button class="negative-btn" onclick="subtractPoints('B',2)">-2</button>
-        <button class="negative-btn" onclick="subtractPoints('B',3)">-3</button>
-        <button class="negative-btn" onclick="subtractPoints('B',4)">-4</button>
+
+      <div class="fighter red" id="fighterB">
+        <div class="controls">
+          <button class="submit-btn" onclick="winBySubmission('B')">Finalização</button>
+        </div>
+        </br>
+
+        <h1 id="nameB">
+          </h2>
+          <div class="score"><span id="scoreB">0</span></div>
+          <div class="advpen">Vantagem: <span id="advB">0</span></div>
+          <div class="advpen">Punição: <span id="penB">0</span></div>
+
+          <div class="controls">
+            <button class="positive-btn" onclick="addPoints('B',2)">+2</button>
+            <button class="positive-btn" onclick="addPoints('B',3)">+3</button>
+            <button class="positive-btn" onclick="addPoints('B',4)">+4</button>
+          </div>
+
+          <div class="controls">
+            <button class="negative-btn" onclick="subtractPoints('B',2)">-2</button>
+            <button class="negative-btn" onclick="subtractPoints('B',3)">-3</button>
+            <button class="negative-btn" onclick="subtractPoints('B',4)">-4</button>
+          </div>
+          <div class="controls">
+            <button class="positive-btn" onclick="addAdv('B')">Vantagem +</button>
+            <button class="positive-btn" onclick="addPen('B')">Punição +</button>
+          </div>
+          <div class="controls">
+            <button class="negative-btn" onclick="subAdv('B')">Vantagem -</button>
+            <button class="negative-btn" onclick="subPen('B')">Punição -</button>
+          </div>
       </div>
-      <div class="controls">
-        <button class="positive-btn" onclick="addAdv('B')">Vantagem +</button>
-        <button class="positive-btn" onclick="addPen('B')">Punição +</button>
-      </div>
-      <div class="controls">
-        <button class="negative-btn" onclick="subAdv('B')">Vantagem -</button>
-        <button class="negative-btn" onclick="subPen('B')">Punição -</button>
-      </div>
+
     </div>
 
   </div>
 
-</div>
-
-<script src="script.js"></script>
+  <script src="script.js"></script>
 
 </body>
+
 </html>
