@@ -3,6 +3,8 @@
 public class Main {
     public static void main(String[] args) {
         FirstUniqueChar firstUniqueChar = new FirstUniqueChar();
-        System.out.println(firstUniqueChar.firstUniqueChar("abcdefghijklmnopqrstuvwxyzab"));
+        LengthOfLongestSubstring length = new LengthOfLongestSubstring();
+        //System.out.println(firstUniqueChar.firstUniqueChar("abcdefghijklmnopqrstuvwxyzab"));
+        System.out.println(length.lengthOfLongestSubstring("pwwkew"));
     }
 }
