@@ -108,6 +108,7 @@ function createMatch() {
 if (isPublicView) {
   document.querySelectorAll(".controls,#refControls,button").forEach(el => el.style.display = "none");
   document.body.style.cursor = "none";
+  document.body.classList.add("public-view");
 
   const saved = localStorage.getItem("matchState");
   if (saved) {

@@ -117,3 +117,7 @@ button {
   cursor: pointer;
   float: right;
 }
+
+.public-view .container {
+  flex-direction: row-reverse;
+}

@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5386a023-ef62-4314-956c-c8807c2c8158" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/TopKFrequent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/LengthOfLongestSubstring.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/LengthOfLongestSubstring.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
-    </list>
+    <list default="true" id="5386a023-ef62-4314-956c-c8807c2c8158" name="Changes" comment="mock test 3" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -80,7 +75,20 @@
       <option name="presentableId" value="Default" />
       <updated>1774046252428</updated>
     </task>
+    <task id="LOCAL-00001" summary="mock test 3">
+      <option name="closed" value="true" />
+      <created>1774287511498</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1774287511498</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="mock test 3" />
+    <option name="LAST_COMMIT_MESSAGE" value="mock test 3" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -102,13 +110,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/TopKFrequent.java</url>
-          <line>37</line>
-          <option name="timeStamp" value="13" />
+          <line>35</line>
+          <option name="timeStamp" value="17" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/TopKFrequent.java</url>
-          <line>12</line>
-          <option name="timeStamp" value="16" />
+          <line>8</line>
+          <option name="timeStamp" value="18" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
