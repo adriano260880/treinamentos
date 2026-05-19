@@ -334,5 +334,11 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
+selector.addEventListener("pointerdown", () => {
+
+  stopLoop();
+
+});
+
 renderScores();
 startLoop();
