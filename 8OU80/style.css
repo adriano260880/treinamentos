@@ -62,3 +62,36 @@ button {
   font-size: 20px;
   cursor: pointer;
 }
+
+.mode8 {
+  color: #00ffff;
+  text-shadow:
+    0 0 10px #00ffff,
+    0 0 20px #00ffff,
+    0 0 40px #00ffff;
+}
+
+.mode80 {
+  color: #ff8800;
+  text-shadow:
+    0 0 10px #ff8800,
+    0 0 20px #ff8800,
+    0 0 40px #ff8800;
+}
+
+.shake {
+  animation: shake 0.4s;
+}
+
+@keyframes shake {
+
+  0% { transform: translateX(0); }
+
+  25% { transform: translateX(-8px); }
+
+  50% { transform: translateX(8px); }
+
+  75% { transform: translateX(-8px); }
+
+  100% { transform: translateX(0); }
+}

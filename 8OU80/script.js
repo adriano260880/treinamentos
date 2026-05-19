@@ -3,79 +3,156 @@ const attemptText = document.getElementById("attempt");
 const sumText = document.getElementById("sum");
 const resultText = document.getElementById("result");
 
-let currentNumber = 3;
 let interval;
 
-let attempt = 1;
-let total = 0;
-let selectedNumbers = [];
+let currentNumber = 3;
 
-let min = 3;
-let max = 26;
+let attempt = 1;
+
+let total = 0;
+
+let gameOver = false;
+
+let mode8 = false;
+
+let mode80 = false;
+
+let isRolling = false;
 
 function startLoop() {
-    interval = setInterval(() => {
 
-        let range = [];
+  clearInterval(interval);
 
-        for (let i = min; i <= max; i++) {
-            range.push(i);
-        }
+  resultText.innerHTML = "";
 
-        // REGRA ESPECIAL DO 8
-        if (
-            attempt === 3 &&
-            total === 6
-        ) {
-            range.push(2);
-        }
+  interval = setInterval(() => {
 
-        // REGRA ESPECIAL DO 80
-        if (
-            attempt === 3 &&
-            total === 52
-        ) {
-            range.push(28)
-        }
+    let range = [];
 
-        currentNumber =
-            range[Math.floor(Math.random() * range.length)];
+    // RANGE NORMAL
+    for (let i = 3; i <= 26; i++) {
+      range.push(i);
+    }
 
-        selector.textContent = currentNumber;
+    // EVENTOS
+    if (mode8) {
+      range.push(2);
+    }
 
-    }, 80);
+    if (mode80) {
+      range.push(28);
+    }
+
+    currentNumber =
+      range[Math.floor(Math.random() * range.length)];
+
+    selector.textContent = currentNumber;
+
+  }, 80);
+
+  isRolling = true;
 }
 
-function stopLoop() {
+async function stopLoop() {
+
+  // BLOQUEIOS
+  if (!isRolling) return;
+
+  if (gameOver) return;
+
+  // PARA O LOOP
+  isRolling = false;
+
+  clearInterval(interval);
+
+  // SOMA
+  total += currentNumber;
+
+  sumText.textContent = total;
+
+  // =================================
+  // EVENTOS ESPECIAIS
+  // =================================
+
+  if (attempt === 2) {
+
+    // MODO 8
+    if (total === 6) {
+
+      mode8 = true;
+
+      activateMode8();
+
+      attempt++;
+
+      attemptText.textContent = attempt;
+
+      setTimeout(() => {
+
+        startLoop();
+
+      }, 1500);
+
+      return;
+    }
+
+    // MODO 80
+    if (total === 52) {
+
+      mode80 = true;
+
+      activateMode80();
+
+      attempt++;
+
+      attemptText.textContent = attempt;
+
+      setTimeout(() => {
+
+        startLoop();
+
+      }, 1500);
+
+      return;
+    }
+  }
+
+  // =================================
+  // SE FOI A TERCEIRA JOGADA
+  // =================================
+
+  if (attempt >= 3) {
+
+    await endGame();
+
+    return;
+  }
+
+  // =================================
+  // PRÓXIMA RODADA NORMAL
+  // =================================
+
+  attempt++;
+
+  attemptText.textContent = attempt;
+
+  setTimeout(() => {
+
+    startLoop();
+
+  }, 700);
+}
+
+async function endGame() {
+
+    gameOver = true;
 
     clearInterval(interval);
 
-    selectedNumbers.push(currentNumber);
-
-    total += currentNumber;
-
-    sumText.textContent = total;
-
-    if (attempt >= 3) {
-        endGame();
-        return;
-    }
-
-    attempt++;
-
-    attemptText.textContent = attempt;
-
-    setTimeout(() => {
-        startLoop();
-    }, 700);
-}
-
-function endGame() {
-
     resultText.innerHTML =
-            `🏆 SCORE FINAL: ${total}`;
+        `🏆 SCORE ${total}`;
 
-    saveScore(total);
+    await saveScore(total);
 
     // Reinicia automaticamente após 1 segundo
     setTimeout(() => {
@@ -85,66 +162,66 @@ function endGame() {
 
 function saveScore(score) {
 
-  let high =
-    JSON.parse(localStorage.getItem("high")) || [];
+    let high =
+        JSON.parse(localStorage.getItem("high")) || [];
 
-  let low =
-    JSON.parse(localStorage.getItem("low")) || [];
+    let low =
+        JSON.parse(localStorage.getItem("low")) || [];
 
-  const qualifiesHigh =
-    high.length < 10 ||
-    score > high[high.length - 1]?.score;
+    const qualifiesHigh =
+        high.length < 10 ||
+        score > high[high.length - 1]?.score;
 
-  const qualifiesLow =
-    low.length < 10 ||
-    score < low[low.length - 1]?.score;
+    const qualifiesLow =
+        low.length < 10 ||
+        score < low[low.length - 1]?.score;
 
-  // NÃO entrou em nenhum ranking
-  if (!qualifiesHigh && !qualifiesLow) {
+    // NÃO entrou em nenhum ranking
+    if (!qualifiesHigh && !qualifiesLow) {
+        renderScores();
+        return;
+    }
+
+    let initials =
+        prompt("NOVO RECORDE! Digite 3 letras:");
+
+    if (!initials) return;
+
+    initials = initials
+        .toUpperCase()
+        .substring(0, 3);
+
+    // TOP MAIORES
+    if (qualifiesHigh) {
+
+        high.push({ initials, score });
+
+        high.sort((a, b) => b.score - a.score);
+
+        high = high.slice(0, 10);
+
+        localStorage.setItem(
+            "high",
+            JSON.stringify(high)
+        );
+    }
+
+    // TOP MENORES
+    if (qualifiesLow) {
+
+        low.push({ initials, score });
+
+        low.sort((a, b) => a.score - b.score);
+
+        low = low.slice(0, 10);
+
+        localStorage.setItem(
+            "low",
+            JSON.stringify(low)
+        );
+    }
+
     renderScores();
-    return;
-  }
-
-  let initials =
-    prompt("NOVO RECORDE! Digite 3 letras:");
-
-  if (!initials) return;
-
-  initials = initials
-    .toUpperCase()
-    .substring(0, 3);
-
-  // TOP MAIORES
-  if (qualifiesHigh) {
-
-    high.push({ initials, score });
-
-    high.sort((a, b) => b.score - a.score);
-
-    high = high.slice(0, 10);
-
-    localStorage.setItem(
-      "high",
-      JSON.stringify(high)
-    );
-  }
-
-  // TOP MENORES
-  if (qualifiesLow) {
-
-    low.push({ initials, score });
-
-    low.sort((a, b) => a.score - b.score);
-
-    low = low.slice(0, 10);
-
-    localStorage.setItem(
-      "low",
-      JSON.stringify(low)
-    );
-  }
-
-  renderScores();
 }
 
 function renderScores() {
@@ -176,34 +253,85 @@ function renderScores() {
 }
 
 function resetGame() {
-    clearInterval(interval);
 
-    currentNumber = 3;
+  clearInterval(interval);
 
-    attempt = 1;
-    total = 0;
+  currentNumber = 3;
 
-    selectedNumbers = [];
+  attempt = 1;
 
-    selector.textContent = "3";
+  total = 0;
 
-    attemptText.textContent = "1";
+  gameOver = false;
 
-    sumText.textContent = "0";
+  mode8 = false;
 
-    resultText.innerHTML = "";
+  mode80 = false;
 
-    startLoop();
+  isRolling = false;
+
+  selector.classList.remove("mode8");
+  selector.classList.remove("mode80");
+
+  selector.textContent = "3";
+
+  attemptText.textContent = "1";
+
+  sumText.textContent = "0";
+
+  resultText.innerHTML = "";
+
+  startLoop();
+}
+
+function activateMode8() {
+    mode8 = true;
+
+    resultText.innerHTML =
+        "✨ MODO 8 LIBERADO ✨";
+
+    selector.classList.add("mode8");
+
+    shakeScreen();
+
+    //playSpecialSound();
+}
+
+function activateMode80() {
+    mode80 = true;
+
+    resultText.innerHTML =
+        "🔥 MODO 80 LIBERADO 🔥";
+
+    selector.classList.add("mode80");
+
+    shakeScreen();
+
+    //playSpecialSound();
+}
+
+function shakeScreen() {
+
+    document.body.classList.add("shake");
+
+    setTimeout(() => {
+
+        document.body.classList.remove("shake");
+
+    }, 400);
 }
 
 document.addEventListener("keydown", (e) => {
 
-    if (
-        e.code === "Space" ||
-        e.code === "Enter"
-    ) {
-        stopLoop();
-    }
+  if (
+    e.code === "Space" ||
+    e.code === "Enter"
+  ) {
+
+    e.preventDefault();
+
+    stopLoop();
+  }
 });
 
 renderScores();
