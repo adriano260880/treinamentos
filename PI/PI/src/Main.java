@@ -3,7 +3,7 @@
 public class Main {
     public static void main(String[] args) {
 
-        int n = 0;
+        int n = 100000;
         double piDigit = bbp(n);
         int digit = (int) (piDigit * 16);
 
