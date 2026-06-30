@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: order-config
+data:
+  SPRING_KAFKA_BOOTSTRAP_SERVERS: "kafka:9092"
+  ORDER_TOPIC: "orders"
+  LOGGING_LEVEL_ROOT: "INFO"
