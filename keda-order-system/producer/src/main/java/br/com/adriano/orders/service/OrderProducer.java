@@ -22,15 +22,17 @@ public class OrderProducer {
                 KafkaTopics.ORDERS,
                 event.id().toString(),
                 event
-        ).whenComplete(this::logResult);
+        ).whenComplete((result, ex) ->
+                        logResult(event, result, ex));
     }
 
     private void logResult(
+            OrderCreatedEvent event,
             SendResult<String, OrderCreatedEvent> result,
             Throwable ex) {
 
         if (ex != null) {
-            log.error("Erro ao enviar pedido {}", result, ex);
+            log.error("Erro ao enviar pedido {}", event.id(), ex);
             return;
         }
 
@@ -42,13 +44,17 @@ public class OrderProducer {
                                 Pedido enviado com sucesso
                                 =========================================
                                 Pedido....: {}
+                                Cliente...: {}
+                                Valor.....: {}
                                 Topic.....: {}
                                 Partition.: {}
                                 Offset....: {}
                                 Timestamp.: {}
                                 =========================================
                 """,
-                result.getProducerRecord().key(),
+                event.id(),
+                event.customer(),
+                event.value(),
                 metadata.topic(),
                 metadata.partition(),
                 metadata.offset(),
