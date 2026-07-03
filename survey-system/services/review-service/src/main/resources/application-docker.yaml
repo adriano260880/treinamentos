@@ -1,7 +1,7 @@
 spring:
   data:
     mongodb:
-      uri: mongodb://localhost:27017/survey
+      uri: mongodb://mongodb:27017/survey
 
 logging:
   level:

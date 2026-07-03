@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: review-service
+
+  profiles:
+    active: local
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+info:
+  app:
+    name: ${spring.application.name}
+    description: Review Service
+    version: 1.0.0
+
+server:
+  port: 8080
+
+logging:
+  level:
+    root: INFO
+    br.com.adriano.survey.review: DEBUG
