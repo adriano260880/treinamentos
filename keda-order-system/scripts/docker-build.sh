@@ -8,7 +8,7 @@ echo "======================================"
 
 docker build \
     -f producer/Dockerfile \
-    -t producer:1.0 \
+    -t producer:1.0.0 \
     .
 
 echo
@@ -19,5 +19,5 @@ echo "======================================"
 
 docker build \
     -f consumer/Dockerfile \
-    -t consumer:1.0 \
+    -t consumer:1.0.0 \
     .

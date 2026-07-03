@@ -32,6 +32,10 @@ spec:
 
       - name: consumer
 
-        image: consumer:1.0
+        image: consumer:1.0.0
 
         imagePullPolicy: Never
+
+        env:
+          - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
+            value: kafka-kafka-bootstrap.kafka.svc.cluster.local:9092

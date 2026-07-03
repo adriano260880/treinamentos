@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: producer
-          image: producer:1.0
+          image: producer:1.0.0
           imagePullPolicy: Never
 
           ports:

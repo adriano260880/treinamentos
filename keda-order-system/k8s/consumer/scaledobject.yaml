@@ -1,0 +1,36 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+
+metadata:
+  name: consumer
+
+  namespace: order-system
+
+spec:
+
+  scaleTargetRef:
+    name: consumer
+
+  pollingInterval: 5
+
+  cooldownPeriod: 30
+
+  minReplicaCount: 1
+
+  maxReplicaCount: 10
+
+  triggers:
+
+    - type: kafka
+
+      metadata:
+
+        bootstrapServers: kafka-kafka-bootstrap.kafka.svc.cluster.local:9092
+
+        consumerGroup: order-consumer
+
+        topic: orders
+
+        lagThreshold: "5"
+
+        offsetResetPolicy: earliest

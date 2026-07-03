@@ -1,15 +1,22 @@
 #!/bin/bash
-
 set -e
 
-kubectl apply -f k8s/namespace.yaml
+apply() {
+  echo "Applying $1"
+  kubectl apply -f "$1"
+}
 
-kubectl apply -f k8s/kafka
+apply k8s/namespace.yaml
 
-kubectl apply -f k8s/producer
+apply k8s/kafka/02-kafka.yaml
 
-kubectl apply -f k8s/consumer
+apply k8s/producer/deployment.yaml
+apply k8s/producer/service.yaml
 
-kubectl apply -f k8s/keda
+apply k8s/consumer/deployment.yaml
+apply k8s/consumer/scaledobject.yaml
 
-kubectl apply -f k8s/monitoring
+apply k8s/monitoring/namespace.yaml
+apply k8s/monitoring/prometheus.yaml
+apply k8s/monitoring/prometheus-config.yaml
+apply k8s/monitoring/prometheus-service.yaml
