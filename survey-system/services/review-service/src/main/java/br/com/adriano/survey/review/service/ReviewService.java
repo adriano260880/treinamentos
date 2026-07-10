@@ -17,7 +17,7 @@ public class ReviewService {
 
     public ReviewEntity create(ReviewEntity review) {
 
-        review.setCreateDAt(Instant.now());
+        review.setCreatedAt(Instant.now());
         try {
             return repository.save(review);
         } catch (DuplicateKeyException ex) {

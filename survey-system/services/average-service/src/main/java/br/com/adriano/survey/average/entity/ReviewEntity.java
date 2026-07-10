@@ -30,5 +30,5 @@ public class ReviewEntity {
     private Long restaurantId;
     private Long userId;
     private Integer rating;
-    private Instant createDAt;
+    private Instant createdAt;
 }
