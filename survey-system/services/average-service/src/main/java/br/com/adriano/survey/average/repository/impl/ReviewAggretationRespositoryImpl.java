@@ -1,7 +1,7 @@
 package br.com.adriano.survey.average.repository.impl;
 
 import br.com.adriano.survey.average.dto.RestaurantAggregationDto;
-import br.com.adriano.survey.average.entity.ReviewEntity;
+import br.com.adriano.survey.average.entity.ReviewProjection;
 import br.com.adriano.survey.average.repository.custom.ReviewAggregationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
@@ -75,10 +75,10 @@ public class ReviewAggretationRespositoryImpl implements ReviewAggregationReposi
 
         query.fields().include("createdAt");
 
-        ReviewEntity review =
+        ReviewProjection review =
                 mongoTemplate.findOne(
                         query,
-                        ReviewEntity.class
+                        ReviewProjection.class
                 );
 
         if (review == null) {
@@ -86,7 +86,7 @@ public class ReviewAggretationRespositoryImpl implements ReviewAggregationReposi
         }
 
         return Optional.of(
-                review.getCreatedAt()
+                review.createdAt()
                         .atZone(ZoneOffset.UTC)
                         .toLocalDate()
         );

@@ -1,6 +1,6 @@
 package br.com.adriano.survey.average.repository.impl;
 
-import br.com.adriano.survey.average.entity.ReviewEntity;
+import br.com.adriano.survey.average.entity.ReviewProjection;
 import br.com.adriano.survey.average.repository.custom.ReviewUpdateRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -49,7 +49,7 @@ public class ReviewUpdateRepositoryImpl implements ReviewUpdateRepository {
         mongoTemplate.updateMulti(
                 query,
                 update,
-                ReviewEntity.class
+                ReviewProjection.class
         );
     }
 }

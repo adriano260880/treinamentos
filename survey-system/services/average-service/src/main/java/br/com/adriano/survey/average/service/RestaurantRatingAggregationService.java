@@ -6,7 +6,6 @@ import br.com.adriano.survey.average.entity.AggregationStatus;
 import br.com.adriano.survey.average.entity.RestaurantRatingEntity;
 import br.com.adriano.survey.average.repository.AggregationControlRepository;
 import br.com.adriano.survey.average.repository.RestaurantRatingRepository;
-import br.com.adriano.survey.average.repository.ReviewRepository;
 import br.com.adriano.survey.average.repository.custom.ReviewAggregationRepository;
 import br.com.adriano.survey.average.repository.custom.ReviewUpdateRepository;
 import lombok.RequiredArgsConstructor;
@@ -110,6 +109,11 @@ public class RestaurantRatingAggregationService {
 
         List<RestaurantAggregationDto> aggregations =
                 reviewAggregationRepository.aggregate(day);
+
+        log.info("Restaurants found: {}", aggregations.size());
+
+        aggregations.forEach(dto ->
+                log.info("DTO -> {}", dto));
 
         updateRestaurantRatings(aggregations, day);
 

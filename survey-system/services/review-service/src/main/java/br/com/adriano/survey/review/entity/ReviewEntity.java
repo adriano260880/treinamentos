@@ -14,13 +14,14 @@ import java.time.Instant;
 @AllArgsConstructor
 @Document(collection = "reviews")
 @CompoundIndex(
-        name = "idx_restaurant_created_at",
-        def = "{'restaurantId': 1 'createdAt': -1}"
-)
-@CompoundIndex(
         name = "idx_order_unique",
-        def = "{'orderId': 1}",
+        def = "{'orderId':1}",
         unique = true
+)
+
+@CompoundIndex(
+        name = "idx_pending_reviews",
+        def = "{'processedAt':1,'createdAt':1,'restaurantId':1}"
 )
 public class ReviewEntity {
 
@@ -31,4 +32,6 @@ public class ReviewEntity {
     private Long userId;
     private Integer rating;
     private Instant createdAt;
+    private Instant processedAt;
+
 }

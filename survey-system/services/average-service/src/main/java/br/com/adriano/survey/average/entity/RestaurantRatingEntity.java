@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection = "restaurant_ration")
+@Document(collection = "restaurant_rating")
 public class RestaurantRatingEntity {
 
     @Id
