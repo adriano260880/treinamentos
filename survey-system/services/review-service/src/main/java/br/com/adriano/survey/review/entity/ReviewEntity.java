@@ -23,6 +23,11 @@ import java.time.Instant;
         name = "idx_pending_reviews",
         def = "{'processedAt':1,'createdAt':1,'restaurantId':1}"
 )
+
+@CompoundIndex(
+        name = "idx_restaurant_recent",
+        def = "{'restaurantId':1,'createdAt':-1}"
+)
 public class ReviewEntity {
 
     @Id
